@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import ModalView from '@/components/ModalView.vue'
 import TodoModal from '@/components/TodoModal.vue'

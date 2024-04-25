@@ -1,10 +1,10 @@
-<script setup>
-import { ref, defineEmits } from 'vue'
+<script setup lang="ts">
+import { ref, defineEmits, type PropType } from 'vue'
 
 const props = defineProps({
-  title: String,
-  list: Array,
-  selected: String
+  title: String as PropType<string>,
+  list: Array<string>,
+  selected: String as PropType<string>,
 })
 const emit = defineEmits(['change'])
 
@@ -15,7 +15,7 @@ const onClick = () => {
   show.value = true
 }
 
-const onItemClick = (data) => {
+const onItemClick = (data: string) => {
   show.value = false
   selectedValue.value = data
   emit('change', data)

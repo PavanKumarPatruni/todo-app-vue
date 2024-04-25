@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import AddButton from '@/components/AddButton.vue'
 </script>
 

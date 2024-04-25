@@ -1,5 +1,3 @@
-"use server";
-
 import type { TTodo } from "@/types";
 
 export const deleteTodo = async (id: TTodo["id"]) => {

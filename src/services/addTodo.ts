@@ -1,5 +1,3 @@
-'use server'
-
 import type { TTodo } from '@/types'
 
 export const addTodo = async ({ todo, type }: Pick<TTodo, 'todo' | 'type'>) => {

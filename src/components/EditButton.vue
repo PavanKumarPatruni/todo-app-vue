@@ -1,13 +1,14 @@
-<script setup>
-import { ref, defineProps } from 'vue'
+<script setup lang="ts">
+import { ref, defineProps, type PropType } from 'vue'
 
 import ModalView from '@/components/ModalView.vue'
 import TodoModal from '@/components/TodoModal.vue'
+import type { TTodo } from '@/types'
 
 const showModal = ref(false)
 
 defineProps({
-  data: Object
+  data: Object as PropType<TTodo>
 })
 </script>
 

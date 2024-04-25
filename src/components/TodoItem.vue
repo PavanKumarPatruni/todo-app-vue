@@ -1,5 +1,5 @@
-<script setup>
-import { computed } from 'vue'
+<script setup lang="ts">
+import { computed, type PropType } from 'vue'
 
 import EditButton from '@/components/EditButton.vue'
 
@@ -7,15 +7,16 @@ import { useTodoStore } from '@/stores/todoStore'
 
 import { deleteTodo } from '@/services/deleteTodo'
 import { updateTodo } from '@/services/updateTodo'
+import type { TTodo, TStatus } from '@/types'
 
 const store = useTodoStore()
 
 const props = defineProps({
-  data: Object
+  data: Object as PropType<TTodo>
 })
 
 const typeClass = computed(() => {
-  switch (props.data.type) {
+  switch (props?.data?.type) {
     case 'CODING':
       return 'bg-red-300 text-red-950'
     case 'GOALS':
@@ -32,7 +33,7 @@ const typeClass = computed(() => {
 })
 
 const todoClass = computed(() => {
-  if (props.data.status === 'DONE') return 'text-slate-500 line-through'
+  if (props?.data?.status === 'DONE') return 'text-slate-500 line-through'
 
   return 'text-slate-100'
 })
@@ -41,15 +42,18 @@ const onUpdate = () => {
   store.fetchTodos()
 }
 
-const triggerUpdateApi = async ({ status }) => {
-  await updateTodo({ ...props.data, status })
+const triggerUpdateApi = async ({ status }: { status: TStatus }) => {
+  if (!props.data) return
 
+  const { id, todo, type } = props.data
+  await updateTodo({ id, todo, type, status })
   onUpdate()
 }
 
 const onDeleteClick = async () => {
-  await deleteTodo(props.data.id)
+  if (!props.data) return
 
+  await deleteTodo(props.data.id)
   onUpdate()
 }
 
@@ -62,6 +66,8 @@ const onDoneClick = () => {
 }
 
 const onClick = () => {
+  if (!props.data) return
+
   props.data.status === 'DONE' ? onResetClick() : onDoneClick()
 }
 </script>
@@ -70,7 +76,7 @@ const onClick = () => {
   <div class="flex items-center justify-between p-4">
     <div class="flex items-center gap-4 cursor-pointer" @click="onClick">
       <transition name="fade">
-        <template v-if="data.status === 'ACTIVE'">
+        <template v-if="data?.status === 'ACTIVE'">
           <img src="@/assets/icons/radio_unchecked.svg" width="24" height="24" alt="done" />
         </template>
         <template v-else>
@@ -83,13 +89,13 @@ const onClick = () => {
           typeClass
         "
       >
-        {{ data.type }}
+        {{ data?.type }}
       </span>
-      <span :class="todoClass">{{ data.todo }}</span>
+      <span :class="todoClass">{{ data?.todo }}</span>
     </div>
     <div class="flex items-center gap-4">
       <transition name="fade">
-        <template v-if="data.status === 'ACTIVE'">
+        <template v-if="data?.status === 'ACTIVE'">
           <EditButton :data="data" />
         </template>
       </transition>

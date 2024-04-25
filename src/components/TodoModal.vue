@@ -1,5 +1,5 @@
-<script setup>
-import { ref, defineEmits } from 'vue'
+<script setup lang="ts">
+import { ref, defineEmits, type PropType } from 'vue'
 
 import DropdownView from './DropdownView.vue'
 
@@ -9,6 +9,7 @@ import { updateTodo } from '@/services/updateTodo'
 import { useTodoStore } from '@/stores/todoStore'
 
 import { TYPES } from '@/constants/todo'
+import type { TTodo, TType } from '@/types'
 
 const emit = defineEmits(['cancel'])
 const onCancel = () => {
@@ -17,13 +18,13 @@ const onCancel = () => {
 
 const store = useTodoStore()
 const props = defineProps({
-  data: Object
+  data: Object as PropType<TTodo>
 })
 const types = ref(TYPES)
 const todoText = ref(props?.data?.todo || '')
-const todoType = ref(props?.data?.type || '')
+const todoType = ref<TType>(props?.data?.type || 'RANDOM')
 
-const onChange = (event) => {
+const onChange = (event: any) => {
   todoText.value = event.target.value
 }
 
@@ -38,13 +39,15 @@ const onAdd = async () => {
 }
 
 const onUpdate = async () => {
-  await updateTodo({
-    id: props.data.id,
-    status: props.data.status,
-    todo: todoText.value,
-    type: todoType.value
-  })
-  refreshList()
+  if (props.data) {
+    await updateTodo({
+      id: props.data.id,
+      status: props.data.status,
+      todo: todoText.value,
+      type: todoType.value
+    })
+    refreshList()
+  }
 }
 
 const onClick = () => {
@@ -56,7 +59,7 @@ const onClick = () => {
   onAdd()
 }
 
-const onDropdownChange = (data) => {
+const onDropdownChange = (data: TType) => {
   todoType.value = data
 }
 </script>
