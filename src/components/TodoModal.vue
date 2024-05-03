@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineEmits, type PropType } from 'vue'
+import { ref, type PropType } from 'vue'
 
 import DropdownView from './DropdownView.vue'
 
