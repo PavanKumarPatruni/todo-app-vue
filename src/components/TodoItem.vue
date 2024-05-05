@@ -8,6 +8,7 @@ import { useTodoStore } from '@/stores/todoStore'
 import { deleteTodo } from '@/services/deleteTodo'
 import { updateTodo } from '@/services/updateTodo'
 import type { TTodo, TStatus } from '@/types'
+import router from '@/router'
 
 const store = useTodoStore()
 
@@ -65,6 +66,12 @@ const onDoneClick = () => {
   triggerUpdateApi({ status: 'DONE' })
 }
 
+const onViewClick = () => {
+  if (!props.data) return
+
+  router.push(`/todo/${props.data.id}`)
+}
+
 const onClick = () => {
   if (!props.data) return
 
@@ -94,6 +101,7 @@ const onClick = () => {
       <span :class="todoClass">{{ data?.todo }}</span>
     </div>
     <div class="flex items-center gap-4">
+      <button @click="onViewClick">View</button>
       <transition name="fade">
         <template v-if="data?.status === 'ACTIVE'">
           <EditButton :data="data" />
